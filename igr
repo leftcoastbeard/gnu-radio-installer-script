@@ -1,0 +1,44 @@
+#!/bin/sh
+#Downloads and runs build-gnuradio
+echo "Cleaning up..."
+cd ~
+rm build-gnuradio
+sudo rm -R gnuradio
+mkdir gnuradio
+cd gnuradio
+echo "Updating the repository before we run the script"
+sudo apt-get update
+echo "Downloading script"
+wget http://www.sbrac.org/files/build-gnuradio
+echo "Running build-gnuradio"
+chmod +x ./build-gnuradio
+./build-gnuradio -ja -v
+
+echo "Done. Updating .bashrc"
+PPCHECK="export PYTHONPATH=/usr/local/lib/python2.7/dist-packages"
+#add the rest of the python path
+
+if grep -q "$PPCHECK" ~/.bashrc
+then echo "Python path is up to date in ~/.bashrc"
+else echo $PPCHECK >> ~/.bashrc
+fi
+
+echo "Adding black lists"
+#sudo touch /etc/modprobe.d/no-rtl.conf
+blc=no-rtl.conf
+cat > $blc  << EOF
+blacklist dvb_usb_rtl28xxu
+blacklist rtl2832
+blacklist rtl2830
+EOF
+
+sudo cp ./$blc /etc/modprobe.d/
+rm $blc
+
+echo -n "Shall we reboot?"
+read response
+case $response in 
+	y|Y|YES|yes|Yes)
+		sudo reboot
+esac
+exit
