@@ -5,13 +5,13 @@ It is **untested for other distros**.
 Usage:
  `dash igr`
  
-Or
+Or:
  `sh igr`
   
-Or
+Or:
  `bash igr`
 
 This script bootstraps the `build-gnuradio` script provided [here](http://gnuradio.org/redmine/projects/gnuradio/wiki/InstallingGRFromSource).
 It ensures that the correct python environment variables are included in the users `.bashrc` file.
-It also adds devices entries to a modprobe.d blacklist so that the os does not capture the devices. See [here](http://reactivemusic.net?p=10462)
+It also adds devices entries to a modprobe.d blacklist so that the os does not capture the devices. See [here](http://reactivemusic.net?p=10462).
 
