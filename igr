@@ -7,7 +7,7 @@ sudo rm -R gnuradio
 mkdir gnuradio
 cd gnuradio
 echo "Updating the repository before we run the script"
-sudo apt-get update
+sudo apt update
 echo "Downloading script"
 wget http://www.sbrac.org/files/build-gnuradio
 echo "Running build-gnuradio"
