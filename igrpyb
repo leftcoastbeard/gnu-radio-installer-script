@@ -8,6 +8,8 @@ echo "Making sure we're up to date"
 sudo apt update
 echo "Installing latest tools"
 sudo apt install python-pip git -y
+echo "Updating pip..."
+sudo pip install --upgrade pip
 echo "Installing PyBOMBS from GitHub"
 sudo pip install --upgrade git+https://github.com/gnuradio/pybombs.git
 echo "Adding recipes:"
