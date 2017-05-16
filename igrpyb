@@ -1,0 +1,56 @@
+#!/bin/sh
+#Downloads and runs build-gnuradio
+prefix=/usr/local
+
+echo "Welcome. Lets install Gnuradio using PyBOMBS."
+
+echo "Making sure we're up to date"
+sudo apt update
+echo "Installing latest tools"
+sudo apt install python-pip git -y
+echo "Installing PyBOMBS from GitHub"
+sudo pip install --upgrade git+https://github.com/gnuradio/pybombs.git
+echo "Adding recipes:"
+pybombs recipes add gr-recipes git+https://github.com/gnuradio/gr-recipes.git
+pybombs recipes add gr-etcetera git+https://github.com/gnuradio/gr-etcetera.git
+echo "Setup, build, and install. Using $prefix"
+sudo pybombs prefix init $prefix -a myprefix -R gnuradio-default
+
+echo "Setup User Icons"
+
+sudo chmod 755 $prefix/libexec/gnuradio/grc_setup_freedesktop
+sudo $prefix/libexec/gnuradio/grc_setup_freedesktop install
+
+echo "Done building gnuradio. Updating .bashrc"
+PPCHECK="export PYTHONPATH=/usr/local/lib/python2.7/dist-packages"
+#add the rest of the python path
+
+if grep -q "$PPCHECK" ~/.bashrc
+then echo "Python path is up to date in ~/.bashrc"
+else echo $PPCHECK >> ~/.bashrc
+fi
+
+echo "Adding black lists"
+#sudo touch /etc/modprobe.d/no-rtl.conf
+blc=no-rtl.conf
+if [ -e "/etc/modprobe.d/$blc" ] ; then
+
+cat > $blc  << EOF
+blacklist dvb_usb_rtl28xxu
+blacklist rtl2832
+blacklist rtl2830
+EOF
+
+	sudo cp ./$blc /etc/modprobe.d/
+	rm $blc
+else 
+	echo "$blc Exists in /etc/modprobe.d/, not creating"
+fi
+
+echo -n "Shall we reboot?"
+read response
+case $response in 
+	y|Y|YES|yes|Yes)
+		sudo reboot
+esac
+exit
