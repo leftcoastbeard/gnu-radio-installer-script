@@ -1,3 +1,10 @@
+# Update
+Use `igrpyb` as it installs using the current recommended method of installing via `pybombs`
+See [here](https://github.com/gnuradio/pybombs) for more info.
+
+Usage:
+ `dash igrpyb`
+
 # igr
 Used to install the latest version of GNU Radio as part of a lab install in Ubuntu LTS.
 It is **untested for other distros**.
