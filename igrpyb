@@ -1,31 +1,33 @@
 #!/bin/sh
 #Downloads and runs build-gnuradio
 prefix=/usr/local
+bmag='\033[0;45m'
+nc='\033[0m'
 
-echo "Welcome. Lets install Gnuradio using PyBOMBS."
+echo -e "${bmag}Welcome. Lets install Gnuradio using PyBOMBS.${nc}"
 
-echo "Making sure we're up to date"
+echo -e "${bmag}Making sure we're up to date${nc}"
 sudo apt update
-echo "Installing latest tools"
+echo -e "${bmag}Installing latest tools${nc}"
 sudo apt install python-pip python-apt git -y
-echo "Updating pip..."
+echo -e "${bmag}Updating pip...${nc}"
 sudo -H pip install --upgrade pip
-echo "Installing PyBOMBS from GitHub"
+echo -e "${bmag}Installing PyBOMBS from GitHub${nc}"
 sudo -H pip install --upgrade git+https://github.com/gnuradio/pybombs.git
-echo "Adding recipes:"
+echo -e "${bmag}Adding recipes:${nc}"
 pybombs recipes add gr-recipes git+https://github.com/gnuradio/gr-recipes.git
 pybombs recipes add gr-etcetera git+https://github.com/gnuradio/gr-etcetera.git
-echo "Setup, build, and install. Using $prefix"
+echo -e "${bmag}Setup, build, and install. Using $prefix ${nc}"
 sudo pybombs prefix init $prefix -a myprefix -R gnuradio-default
 sudo pybombs install fftw rtl-sdr gr-osmosdr
 sudo ldconfig
 
-echo "Setup User Icons"
+echo -e "${bmag}Setup User Icons${nc}"
 
 sudo chmod 755 $prefix/libexec/gnuradio/grc_setup_freedesktop
 sudo $prefix/libexec/gnuradio/grc_setup_freedesktop install
 
-echo "Done building gnuradio. Updating .bashrc"
+echo -e "${bmag}Done building gnuradio. Updating .bashrc${nc}"
 PPCHECK="export PYTHONPATH=/usr/local/lib/python2.7/dist-packages"
 #add the rest of the python path
 
@@ -34,7 +36,7 @@ then echo "Python path is up to date in ~/.bashrc"
 else echo $PPCHECK >> ~/.bashrc
 fi
 
-echo "Adding black lists"
+echo -e "${bmag}Adding black lists${nc}"
 #sudo touch /etc/modprobe.d/no-rtl.conf
 blc=no-rtl.conf
 if [ -e "/etc/modprobe.d/$blc" ] ; then
@@ -48,10 +50,10 @@ EOF
 	sudo cp ./$blc /etc/modprobe.d/
 	rm $blc
 else 
-	echo "$blc Exists in /etc/modprobe.d/, not creating"
+	echo -e "${bmag}$blc Exists in /etc/modprobe.d/, not creating${nc}"
 fi
 
-echo -n "Shall we reboot?"
+echo -n -e "${bmag}Shall we reboot?${nc}"
 read response
 case $response in 
 	y|Y|YES|yes|Yes)
